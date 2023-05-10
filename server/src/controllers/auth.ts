@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createUser, getUserWithPassword, saveUser, verifyPassword } from "../models/User";
+import { createUser, getUserById, getUserWithPassword, saveUser, verifyPassword } from "../models/User";
 import jwt from "jsonwebtoken";
 import {
   JWT_SECRET_REFRESH,
@@ -50,7 +50,7 @@ export const login = async (req: Request, res: Response) => {
 
     /**creates session token */
     const accessToken = jwt.sign(
-      { _id: verifiedUser._id, userType: verifiedUser.userType, vendorId: verifiedUser.vendorId  },
+      { _id: verifiedUser._id, username: verifiedUser.username, userType: verifiedUser.userType, vendorId: verifiedUser.vendorId  },
       JWT_SECRET_ACCESS,
       {
         expiresIn: "10m",
@@ -58,7 +58,7 @@ export const login = async (req: Request, res: Response) => {
     );
 
     const refreshToken = jwt.sign(
-      { _id: verifiedUser._id, userType: verifiedUser.userType, vendorId: verifiedUser.vendorId },
+      { _id: verifiedUser._id, username: verifiedUser.username, userType: verifiedUser.userType, vendorId: verifiedUser.vendorId },
       JWT_SECRET_REFRESH,
       {
         expiresIn: "1y",
@@ -99,13 +99,16 @@ export const handleRefresh = async (req: Request, res: Response) => {
     ) as verifiedPayload;
 
     const accessToken = jwt.sign(
-      { _id: verified._id, userType: verified.userType, vendorId: verified.vendorId },
+      { _id: verified._id, username: verified.username, userType: verified.userType, vendorId: verified.vendorId },
       JWT_SECRET_ACCESS,
       {
         expiresIn: "10m",
       }
     );
-    return res.status(201).json({ accessToken });
+
+    const user = await getUserById(session.userId)
+
+    return res.status(201).json({ accessToken, user });
   } catch (err: any) {
     return res.status(500).json({ error: err.message });
   }

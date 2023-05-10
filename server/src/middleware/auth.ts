@@ -21,7 +21,7 @@ export const verifyAccessToken = async (
       accessToken,
       JWT_SECRET_ACCESS
     ) as verifiedPayload;
-    req.user = { _id: verified._id, userType: verified.userType, vendorId: verified.vendorId };
+    req.user = { _id: verified._id, username: verified.username, userType: verified.userType, vendorId: verified.vendorId };
     next();
   } catch (err: any) {
     return res.status(500).json({ error: err.message });

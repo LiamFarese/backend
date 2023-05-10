@@ -63,6 +63,15 @@ export const getUserByUsername = async (username: string) => {
   }
 }
 
+export const getUserById = async (userId: Types.ObjectId) => {
+  try {
+    const user = await User.findById(userId);
+    return user;
+  } catch (err: any) {
+    throw new Error(`Could not find user, ${err.message}`)
+  }
+}
+
 export const getUserWithPassword = async (username :string) => {
   try {
     const userWithPassword = User.findOne({ username: username }).select("+password");

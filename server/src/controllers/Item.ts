@@ -50,7 +50,7 @@ export const getAllItems = async (req: Request, res: Response) => {
   try {
     const items = await Item.find();
     if(items.length === 0){
-      return res.status(404).json({message: "No users found"});
+      return res.status(404).json({message: "No items found"});
     }
     return res.status(200).json(items);
   } catch (err: any) {

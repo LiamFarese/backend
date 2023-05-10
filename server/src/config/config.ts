@@ -20,6 +20,7 @@ export const JWT_SECRET_REFRESH: string = process.env
 
 export interface verifiedPayload {
   _id: string;
+  username: string;
   userType: string;
   vendorId: string;
 }
@@ -29,6 +30,7 @@ declare global {
     export interface Request {
       user?: {
         _id: string;
+        username: string;
         userType: string;
         vendorId: string;
       };

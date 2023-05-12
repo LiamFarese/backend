@@ -33,11 +33,6 @@ app.use("/users", userRoutes);
 app.use("/items", itemRoutes);
 app.use("/orders", orderRoutes);
 
-/** Health check */
-app.get("/health-check", (req: Request, res: Response, next: NextFunction) =>
-  res.status(200).json({ message: "server is healthy" })
-);
-
 /** Error Handling */
 app.use((req: Request, res: Response, next: NextFunction) => {
   const error = new Error("endpoint not found");

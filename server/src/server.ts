@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { MONGO_URL, SERVER_PORT } from "./config/config";
 import app from "./app"
-import { createUser, saveUser } from "./models/User";
+
 
 /* connect to mongoose then start server*/
 

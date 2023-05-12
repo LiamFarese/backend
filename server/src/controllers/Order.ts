@@ -22,9 +22,9 @@ export const createOrder = async (req: Request, res: Response) => {
       const updateItem = await Item.findOne({_id: item.itemId });
       /**makes sure there is enough stock to process the order and checks the item exists */
       if (!updateItem){
-        return res.status(404).json({message: "Item does not exist"});
+        return res.status(404).json({message: `Item: ${item.name} does not exist`});
       } else if (updateItem.stock < item.quantity){
-        return res.status(500).json({itemId: updateItem._id, message: "not enough stock"})
+        return res.status(500).json({message: `Not enough stock of ${item.name}`})
       };
       }
     /**if all items are in stock they are subtracted from the databse */

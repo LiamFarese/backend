@@ -7,6 +7,7 @@ interface IOrder {
   vendorId: Types.ObjectId;
   items: {
     itemId: Types.ObjectId;
+    name: string;
     price: number;
     quantity: string;
   }[];
@@ -25,6 +26,7 @@ const OrderSchema: Schema = new Schema(
     items: [
       {
         itemId: { type: Schema.Types.ObjectId, ref: "Item", required: true },
+        name: {type: String, required: true},
         price: { type: Number, required: true},
         quantity: { type: Number, required: true },
       },

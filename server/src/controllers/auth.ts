@@ -89,7 +89,7 @@ export const handleRefresh = async (req: Request, res: Response) => {
   try {
     const cookies = req.cookies;
     if (!cookies?.refreshToken) {
-      return res.status(401).json({ message: "No refresh token provided" });
+      return res.status(403).json({ message: "No refresh token provided" });
     }
     const session = await getSessionByRefreshToken(cookies.refreshToken);
 

@@ -23,7 +23,7 @@ router.get("/:vendorId/:orderId", verifyAccessToken, authorizeVendorId, getOrder
 router.get("/:vendorId", verifyAccessToken, authorizeVendorId, getVendorOrders);
 
 /** returns an array with three numbers, [0] = sale revenue from the last day, [1] = last week, [2] = all time */
-router.get("/:vendorId/:discard/sales", verifyAccessToken, authorizeVendorId, authorizeUserType("vendor"), getSalesStats);
+router.get("/:vendorId/:discard/sales", verifyAccessToken, authorizeVendorId, getSalesStats);
 
 /** DELTE ***************************************************/
 

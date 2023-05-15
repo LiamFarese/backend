@@ -2,7 +2,7 @@ import express from "express";
 import { authorizeUser, authorizeVendorId } from "../middleware/auth";
 import { verifyAccessToken } from "../middleware/auth";
 import { authorizeUserType } from "../middleware/auth";
-import { createItem, deleteItem, getAllItems, getAllVendorItems, getByCategory, getItem, updatePrice, updateStock } from "../controllers/Item";
+import { createItem, deleteItem, getAllItems, getAllVendorItems, getByCategory, getItem, updateItem, updatePrice, updateStock } from "../controllers/Item";
 
 const router = express.Router();
 
@@ -27,6 +27,8 @@ router.get("/:vendorId/:discard/category", verifyAccessToken, authorizeVendorId,
  
 /**update price with specified value, http patch request JSON format: {"newPrice" : ""} */
 router.patch("/:vendorId/:itemId/updatePrice", verifyAccessToken, authorizeVendorId, updatePrice);
+
+router.patch("/:vendorId/:itemId/update", verifyAccessToken, authorizeVendorId, updateItem);
 
 /**update stock with specified value, http patch request JSON format: {"newStock" : ""} */
 router.patch("/:vendorId/:itemId/updateStock", verifyAccessToken, authorizeVendorId, updateStock);

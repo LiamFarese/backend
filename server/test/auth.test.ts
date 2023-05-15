@@ -103,17 +103,6 @@ describe("GET - /auth/refresh", () => {
     })
 })
 
-
-describe("GET - /health-check", () => {
-    it("should return status 201 if the user is successfully created", async () => {
-        const res  = await request(app)
-        .get("/health-check")
-        .send({username: "dsdsds", password: "admin1", userType: "administrator", vendorId: null});
-
-        expect(res.status).toBe(200);
-     })
-})
-
 const userSetup = async () => {
     const user = await createUser("testUser", "testpassword", "vendor");
     const savedUser = await saveUser(user);

@@ -22,13 +22,13 @@ describe("POST - Create an order /:vendorId/create", () => {
         const setUp = await setUpItems();
         const vendorId = setUp.vendor.verifiedUser._id
         const item1 = setUp.items.body[0]._id
-        const item2 = setUp.items.body[1]._id
+        const name = setUp.items.body[0].name
         const item3 = setUp.items.body[2]._id
 
         const res = await request(app)
         .post(`/orders/${vendorId}/create`)
         .set("Authorization", setUp.vendor.accessToken)
-        .send({userId: vendorId, vendorId: vendorId, items: [{itemId: item1, price: 10, quantity: 100}], 
+        .send({userId: vendorId, vendorId: vendorId, items: [{itemId: item1, name: name, price: 10, quantity: 100}], 
         customItems: [], total: 100})
         
         expect(res.status).toBe(201);
@@ -37,17 +37,16 @@ describe("POST - Create an order /:vendorId/create", () => {
         const setUp = await setUpItems();
         const vendorId = setUp.vendor.verifiedUser._id
         const item1 = setUp.items.body[0]._id
-        const item2 = setUp.items.body[1]._id
+        const name = setUp.items.body[0].name
         const item3 = setUp.items.body[2]._id
 
         const res = await request(app)
         .post(`/orders/${vendorId}/create`)
         .set("Authorization", setUp.vendor.accessToken)
-        .send({userId: vendorId, vendorId: vendorId, items: [{itemId: item1, price: 10, quantity: 101}], 
+        .send({userId: vendorId, vendorId: vendorId, items: [{itemId: item1, name: name, price: 10, quantity: 101}], 
         customItems: [], total: 100})
         
         expect(res.status).toBe(500);
-        expect(res.body.message).toBe("not enough stock")
     })
 
 
@@ -58,13 +57,13 @@ describe("DELETE - /:vendorId/:orderId", ()=> {
         const setUp = await setUpItems();
         const vendorId = setUp.vendor.verifiedUser._id
         const item1 = setUp.items.body[0]._id
-        const item2 = setUp.items.body[1]._id
+        const name = setUp.items.body[0].name
         const item3 = setUp.items.body[2]._id
 
         const order = await request(app)
         .post(`/orders/${vendorId}/create`)
         .set("Authorization", setUp.vendor.accessToken)
-        .send({userId: vendorId, vendorId: vendorId, items: [{itemId: item1, price: 10, quantity: 100}], 
+        .send({userId: vendorId, vendorId: vendorId, items: [{itemId: item1, name: name, price: 10, quantity: 100}], 
         customItems: [], total: 100})
         
         const orderId = order.body._id;

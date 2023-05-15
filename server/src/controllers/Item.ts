@@ -121,6 +121,27 @@ export const updateStock = async (req: Request, res: Response) => {
   }
 };
 
+/**update the item */
+export const updateItem = async (req: Request, res: Response) => {
+  try {
+    const updatedItem: IItem = req.body;
+    const item = await Item.findById(updatedItem._id);
+
+    if (!item) {
+      return res.status(404).json({ message: "Item does not exist" });
+    }
+
+    item.stock = updatedItem.stock;
+    item.price = updatedItem.price;
+
+    const savedItem = await item.save();
+
+    return res.status(200).json(savedItem);
+  } catch (err: any) {
+    return res.status(500).json({ error: err.message });
+  }
+};
+
 /**delete item */
 export const deleteItem = async (req: Request, res: Response) => {
   try {

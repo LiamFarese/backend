@@ -130,6 +130,33 @@ export const getSalesStats = async (req:Request, res:Response) => {
   }
 }
 
+/**returns an array with the sales value from the last day, week and all time */
+export const getAllSales = async (req:Request, res:Response) => {
+  try {
+
+    const [ today, week, orders ] = await Promise.all([
+      Order.find({createdAt: {$gte: new Date(new Date().getTime() - (24 * 60 * 60 * 1000))}}),
+      Order.find({createdAt:  {$gte: new Date(new Date().getTime() - (7 * 24 * 60 * 60 * 1000))}}),
+      Order.find(),
+
+    ]);
+
+    const todaySales = today.reduce((sum, value) => {
+      return sum + value.total;
+    }, 0);
+    const weekSales = week.reduce((sum, value) => {
+      return sum + value.total;
+    }, 0);
+    const salesTotal = orders.reduce((sum, value) => {
+      return sum + value.total;
+    }, 0);
+
+    return res.status(200).json({sales: {today: todaySales, week: weekSales, total: salesTotal} });
+  } catch (err: any) {
+    return res.status(500).json({error: err.message});
+  }
+}
+
 export const refundOrder= async (req: Request, res: Response) => {
   const orderId = req.params.orderId;
   console.log(orderId);

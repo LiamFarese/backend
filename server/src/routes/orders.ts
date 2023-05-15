@@ -1,6 +1,6 @@
 import express from "express";
 import { authorizeUserType, authorizeVendorId, verifyAccessToken } from "../middleware/auth";
-import { createOrder, getAllOrders, getOrder, getSalesStats, getVendorOrders, refundOrder } from "../controllers/Order";
+import { createOrder, getAllOrders, getAllSales, getOrder, getSalesStats, getVendorOrders, refundOrder } from "../controllers/Order";
 
 const router = express.Router();
 
@@ -24,6 +24,8 @@ router.get("/:vendorId", verifyAccessToken, authorizeVendorId, getVendorOrders);
 
 /** returns an array with three numbers, [0] = sale revenue from the last day, [1] = last week, [2] = all time */
 router.get("/:vendorId/:discard/sales", verifyAccessToken, authorizeVendorId, getSalesStats);
+
+router.get("/:id/:discard/allSales", verifyAccessToken, authorizeUserType("administrator"), getAllSales)
 
 /** DELTE ***************************************************/
 

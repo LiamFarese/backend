@@ -23,7 +23,7 @@ router.get("/:vendorId/:itemId", verifyAccessToken, authorizeVendorId, getItem);
 
 router.get("/:vendorId/:discard/category", verifyAccessToken, authorizeVendorId, getByCategory);
 
-/**PUT ***********************************************************/
+/**PATCH ***********************************************************/
  
 /**update price with specified value, http patch request JSON format: {"newPrice" : ""} */
 router.patch("/:vendorId/:itemId/updatePrice", verifyAccessToken, authorizeVendorId, updatePrice);

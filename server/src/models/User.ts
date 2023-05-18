@@ -2,21 +2,21 @@ import { Schema, Types, model } from "mongoose";
 import bcrypt from "bcrypt";
 
 interface IUser {
-  _id: Types.ObjectId;
-  username: string;
-  password: string;
-  userType: "vendor" | "employee" | "administrator";
-  vendorId?: Types.ObjectId;
+	_id: Types.ObjectId;
+	username: string;
+	password: string;
+	userType: "vendor" | "employee" | "administrator";
+	vendorId?: Types.ObjectId;
 }
 
 const UserSchema: Schema = new Schema(
-  {
-    username: { type: String, required: true, unique: true },
-    password: { type: String, required: true, select: false },
-    userType: { type: String, default: "vendor" },
-    vendorId: { type: Schema.Types.ObjectId, ref: "User", default: null },
-  },
-  { timestamps: true }
+	{
+		username: { type: String, required: true, unique: true },
+		password: { type: String, required: true, select: false },
+		userType: { type: String, default: "vendor" },
+		vendorId: { type: Schema.Types.ObjectId, ref: "User", default: null },
+	},
+	{ timestamps: true }
 );
 
 const User = model<IUser>("User", UserSchema);
@@ -24,43 +24,43 @@ const User = model<IUser>("User", UserSchema);
 export { IUser, User };
 
 export const createUser = async (username : string, password: string, userType : string, vendorId? : Types.ObjectId) => {
-  try {
-  
-    if (!["vendor", "employee", "administrator"].includes(userType)){
-      throw new Error("not a valid user type");
-    }
-  
-    const existingUser = await getUserByUsername(username);
-  
-      if (existingUser) {
-        throw new Error("user already exists" );
-      }
-    
-    const salt = await bcrypt.genSalt();
-    const passwordHash = await bcrypt.hash(password, salt);
-  
-    /** creates new user and saves to database */
-    const newUser = new User({
-      username,
-      password: passwordHash,
-      userType,
-      vendorId,
-    });
+	try {
 
-    return newUser;
-  } catch (err: any) {
-    throw new Error(`could not create user: ${err.message}`)
-  }
+		if (!["vendor", "employee", "administrator"].includes(userType)){
+			throw new Error("not a valid user type");
+		}
+
+		const existingUser = await getUserByUsername(username);
+
+		if (existingUser) {
+			throw new Error("user already exists" );
+		}
+
+		const salt = await bcrypt.genSalt();
+		const passwordHash = await bcrypt.hash(password, salt);
+
+		/** creates new user and saves to database */
+			const newUser = new User({
+			username,
+			password: passwordHash,
+			userType,
+			vendorId,
+		});
+
+		return newUser;
+	} catch (err: any) {
+		throw new Error(`could not create user: ${err.message}`)
+	}
 
 }
 
 export const getUserByUsername = async (username: string) => {
-  try {
-    const user = await User.findOne({ username });
-    return user;
-  } catch (err: any) {
-    throw new Error(`Could not find user, ${err.message}`); 
-  }
+	try {
+		const user = await User.findOne({ username });
+		return user;
+	} catch (err: any) {
+		throw new Error(`Could not find user, ${err.message}`); 
+	}
 }
 
 export const getUserById = async (userId: Types.ObjectId) => {

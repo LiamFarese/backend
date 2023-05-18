@@ -71,6 +71,7 @@ export const getAllVendorItems = async (req: Request, res: Response) => {
 };
 
 export const getByCategory = async (req: Request, res: Response) => {
+
   try {
     const category = req.params.category;
     const items = await Item.find({category: category});
@@ -144,9 +145,15 @@ export const updateItem = async (req: Request, res: Response) => {
 };
 
 /**delete item */
+  use({ 'rose-pine/neovim', as = 'rose-pine' })
+
+  vim.cmd('colorscheme rose-pine')
 export const deleteItem = async (req: Request, res: Response) => {
   try {
     const itemId = req.params.itemId;
+  use({ 'rose-pine/neovim', as = 'rose-pine' })
+
+  vim.cmd('colorscheme rose-pine')
     const item = await Item.findByIdAndDelete(itemId);
     if(item){
       return res.status(202).json({ message: "item successfully deleted" });

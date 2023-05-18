@@ -5,55 +5,55 @@ import { Request, Response } from "express";
 
 export const createOrder = async (req: Request, res: Response) => {
   try {
-    const { userId, vendorId, items, customItems, total  } = req.body;
-    const user = await User.findById(userId);
+	  const { userId, vendorId, items, customItems, total  } = req.body;
+	  const user = await User.findById(userId);
 
-    /**verifiying user and vendor exist */
-    if (!user){
-      return res.status(404).json({message: "user not found"});
-    }
-    const vendor = await User.findById(vendorId);
-    if (!vendor){
-      return res.status(404).json({message: "vendor not found"});
-    }
+	  /**verifiying user and vendor exist */
+	  if (!user){
+		  return res.status(404).json({message: "user not found"});
+	  }
+	  const vendor = await User.findById(vendorId);
+	  if (!vendor){
+		  return res.status(404).json({message: "vendor not found"});
+	  }
 
-    /**iterates over item array and retrieves id given to compare stock to quantity in order */
-    for (const item of items) {
-      const updateItem = await Item.findOne({_id: item.itemId });
-      /**makes sure there is enough stock to process the order and checks the item exists */
-      if (!updateItem){
-        return res.status(404).json({message: `Item: ${item.name} does not exist`});
-      } else if (updateItem.stock < item.quantity){
-        return res.status(500).json({message: `Not enough stock of ${item.name}`})
-      };
-      }
-    /**if all items are in stock they are subtracted from the databse */
-    for( const item of items){
-      const updateItem = await Item.findOne({_id: item.itemId });
-      if (!updateItem){
-        return res.status(404).json({message: "item not found"});
-      }
-      updateItem.stock -= item.quantity;
-      await updateItem.save();
-    }
+	  /**iterates over item array and retrieves id given to compare stock to quantity in order */
+	  for (const item of items) {
+		  const updateItem = await Item.findOne({_id: item.itemId });
+		  /**makes sure there is enough stock to process the order and checks the item exists */
+		  if (!updateItem){
+			  return res.status(404).json({message: `Item: ${item.name} does not exist`});
+		  } else if (updateItem.stock < item.quantity){
+			  return res.status(500).json({message: `Not enough stock of ${item.name}`})
+		  };
+	  }
+	  /**if all items are in stock they are subtracted from the databse */
+	  for( const item of items){
+		  const updateItem = await Item.findOne({_id: item.itemId });
+		  if (!updateItem){
+			  return res.status(404).json({message: "item not found"});
+		  }
+		  updateItem.stock -= item.quantity;
+		  await updateItem.save();
+	  }
 
     /**logic for if the order has custom items or not */
     let newOrder: IOrder;
 
     if (customItems.length > 0) {
-      newOrder = await new Order({
-        userId,
-        vendorId,
-        items,
-        customItems,
-        total
-      }).save()
+	    newOrder = await new Order({
+		    userId,
+		    vendorId,
+		    items,
+		    customItems,
+		    total
+	    }).save()
     }
     newOrder = await new Order({
-      userId,
-      vendorId,
-      items,
-      total
+	    userId,
+	    vendorId,
+	    items,
+	    total
     }).save()
     return res.status(201).json(newOrder);
   } catch (err: any) {
